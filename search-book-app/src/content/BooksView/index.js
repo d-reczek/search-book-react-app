@@ -24,86 +24,108 @@ const Container = styled.div`
 `;
 const BooksView = () => {
   const [data, setData] = useState(null);
-  const [resources, setResources] = useState(null);
-
+  const [data2, setData2] = useState([]);
+  const [page, setPage] = useState(1);
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(page);
+  }, [page]);
+
   //   console.log(data);
-  const fetchData = () => {
-    axios("https://gnikdroy.pythonanywhere.com/api/book/?page=67").then(res => {
-      setData(res.data.results);
-      setResources(res.data.results.title);
-    });
+  const fetchData = page => {
+    axios(`https://gnikdroy.pythonanywhere.com/api/book/?search=sherlock`).then(
+      res => {
+        console.log("zzz");
+        console.log(page);
+        setData(res.data.results);
+        // if (Array.isArray(data) && page === 1) {
+        //   setData2(res.data.results);
+        //   data2.push(data);
+        //   console.log("tak");
+        // }
+        if (Array.isArray(data)) {
+          setData2([...data2, ...res.data.results]);
+          console.log("nie");
+        }
+      }
+    );
   };
-  const getResources = fetchedData => {
-    let result = "";
-    if (Array.isArray(data)) {
-      data.map(data => {
-        data.resources.map(resource => {
-          switch (resource.type) {
-            case fetchedData:
-              //   console.log(resource.uri);
-              return (result = resource.uri);
-          }
-        });
-      });
-    }
-    console.log(result);
-    return result;
+  //   useEffect(() => {
+  //     fetchData();
+  //   }, []);
+  //   setResources([...data]);
+
+  let count = page;
+  const handleClick = () => {
+    // if (Array.isArray(data) && data.length >= 10 && page === 1) {
+    //   data2.push(data);
+    //   console.log("tak");
+    // }
+    // if (Array.isArray(data) && test) {
+    //   setData2([...data2]);
+    //   console.log("nie");
+    // }
+    count += 1;
+    setPage(count);
+    // setData2([...data]);
   };
-  getResources("image/jpeg");
   console.log(data);
   return (
     <Container>
+      <button onClick={handleClick}>Klik</button>
       {Array.isArray(data) &&
-        data.map(book => (
-          <>
-            <Paper
-              sx={{
-                p: 2,
-                width: "300px",
-                minHeight: "200px",
-              }}>
-              <Grid container spacing={2}>
-                <Grid item>
-                  {book.resources.map(
-                    item =>
-                      item.type === "image/jpeg" &&
-                      item.uri.includes("medium") && (
-                        <Img alt="complex" src={item.uri} />
-                      )
-                  )}
-                </Grid>
-                <Grid item xs={12} sm container>
-                  <Grid item xs container direction="column" spacing={2}>
-                    <Grid item xs>
-                      <Typography
-                        gutterBottom
-                        variant="subtitle1"
-                        component="div">
-                        {book.title}
-                      </Typography>
-                    </Grid>
+        data.map(
+          book =>
+            book.type === "Text" && (
+              <>
+                <Paper
+                  sx={{
+                    p: 2,
+                    width: "300px",
+                    minHeight: "200px",
+                  }}>
+                  <Grid container spacing={2}>
                     <Grid item>
                       {book.resources.map(
                         item =>
-                          item.type.includes("text/html" && "htm") &&
-                          item.uri.includes(".htm") && (
-                            <Button variant="outlined">
-                              <Link underline="none" target="blank" href={item.uri}>
-                                READ
-                              </Link>
-                            </Button>
+                          item.type === "image/jpeg" &&
+                          item.uri.includes("medium") && (
+                            <Img alt="complex" src={item.uri} />
                           )
                       )}
                     </Grid>
+                    <Grid item xs={12} sm container>
+                      <Grid item xs container direction="column" spacing={2}>
+                        <Grid item xs>
+                          <Typography
+                            gutterBottom
+                            variant="subtitle1"
+                            component="div">
+                            {book.title}
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          {book.resources.map(
+                            item =>
+                              item.type.includes("text/html" && "htm") &&
+                              item.uri.includes(".htm") && (
+                                <Button variant="outlined">
+                                  <Link
+                                    underline="none"
+                                    target="blank"
+                                    href={item.uri}>
+                                    READ
+                                  </Link>
+                                </Button>
+                              )
+                          )}
+                        </Grid>
+                      </Grid>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </Grid>
-            </Paper>
-          </>
-        ))}
+                </Paper>
+              </>
+            )
+        )}
     </Container>
   );
 };
