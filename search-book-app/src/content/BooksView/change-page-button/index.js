@@ -1,11 +1,12 @@
 import { Button, Icon } from "@mui/material";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import SvgIcon from "@mui/material/SvgIcon";
 
-const ChangePageButton = ({ type }) => {
+
+const ChangePageButton = ({ type, handleClick }) => {
   return (
-    <Button variant="text">
-      {/* <ArrowBackIosIcon></ArrowBackIosIcon> */}
+    <Button
+      onClick={handleClick}
+      sx={{ width: "100px", margin: "20px" }}
+      variant="text">
       <Icon sx={{ fontSize: "60px" }}>arrow_{type}_ios</Icon>
     </Button>
   );
