@@ -2,131 +2,128 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import { styled as materialUIStyled } from "@mui/material/styles";
-import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import styled from "styled-components";
+import PageWrapper from "../../common";
 
 const Img = materialUIStyled("img")({
-  margin: "auto",
+  margin: "0px",
   display: "block",
-  maxWidth: "100px",
+  maxWidth: "150px",
   maxHeight: "200px",
 });
-const Container = styled.div`
-  height: 100vh;
+const MainStyles = styled.div`
   display: flex;
-  gap: 10px;
+`;
+const BooksContainer = styled(MainStyles)`
+  height: 100vh;
+  gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
 `;
+
+const BookContainer = styled(MainStyles)`
+  gap: 5px;
+  padding: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
+const BookInfoContainer = styled(MainStyles)`
+  gap: 30px;
+  width: 100%;
+  // justify-content: space-evenly;
+`;
+
+const BookInfoParagraph = styled.span`
+  font-size: 16px;
+`;
+const BookTitleName = styled.h2`
+  margin: 2px;
+  font-size: 20px;
+  font-weight: bold;
+`;
 const BooksView = () => {
   const [data, setData] = useState(null);
-  const [data2, setData2] = useState([]);
   const [page, setPage] = useState(1);
   useEffect(() => {
     fetchData(page);
   }, [page]);
 
-  //   console.log(data);
+  console.log(data);
   const fetchData = page => {
-    axios(`https://gnikdroy.pythonanywhere.com/api/book/?search=sherlock`).then(
+    axios(`https://gnikdroy.pythonanywhere.com/api/book/?page=${page}`).then(
       res => {
-        console.log("zzz");
-        console.log(page);
         setData(res.data.results);
-        // if (Array.isArray(data) && page === 1) {
-        //   setData2(res.data.results);
-        //   data2.push(data);
-        //   console.log("tak");
-        // }
-        if (Array.isArray(data)) {
-          setData2([...data2, ...res.data.results]);
-          console.log("nie");
-        }
       }
     );
   };
-  //   useEffect(() => {
-  //     fetchData();
-  //   }, []);
-  //   setResources([...data]);
 
   let count = page;
   const handleClick = () => {
-    // if (Array.isArray(data) && data.length >= 10 && page === 1) {
-    //   data2.push(data);
-    //   console.log("tak");
-    // }
-    // if (Array.isArray(data) && test) {
-    //   setData2([...data2]);
-    //   console.log("nie");
-    // }
     count += 1;
     setPage(count);
-    // setData2([...data]);
   };
   console.log(data);
   return (
-    <Container>
-      <button onClick={handleClick}>Klik</button>
-      {Array.isArray(data) &&
-        data.map(
-          book =>
-            book.type === "Text" && (
-              <>
-                <Paper
-                  sx={{
-                    p: 2,
-                    width: "300px",
-                    minHeight: "200px",
-                  }}>
-                  <Grid container spacing={2}>
-                    <Grid item>
-                      {book.resources.map(
-                        item =>
-                          item.type === "image/jpeg" &&
-                          item.uri.includes("medium") && (
-                            <Img alt="complex" src={item.uri} />
-                          )
-                      )}
-                    </Grid>
-                    <Grid item xs={12} sm container>
-                      <Grid item xs container direction="column" spacing={2}>
-                        <Grid item xs>
-                          <Typography
-                            gutterBottom
-                            variant="subtitle1"
-                            component="div">
-                            {book.title}
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                          {book.resources.map(
+    <PageWrapper>
+      <BooksContainer>
+        {Array.isArray(data) &&
+          data.map(
+            book =>
+              book.type === "Text" && (
+                <>
+                  <Paper
+                    sx={{
+                      p: 2,
+                      width: "500px",
+                    }}>
+                    <BookContainer>
+                      <BookInfoContainer>
+                        {book.resources.map(
+                          item =>
+                            item.type === "image/jpeg" &&
+                            item.uri.includes("medium") && (
+                              <Img alt="book-cover" src={item.uri} />
+                            )
+                        )}
+                        <div>
+                          <BookInfoParagraph>Title:</BookInfoParagraph>
+                          <BookTitleName>{book.title}</BookTitleName>
+                          <BookInfoParagraph>Author:</BookInfoParagraph>
+
+                          {book.agents.map(
                             item =>
-                              item.type.includes("text/html" && "htm") &&
-                              item.uri.includes(".htm") && (
-                                <Button variant="outlined">
-                                  <Link
-                                    underline="none"
-                                    target="blank"
-                                    href={item.uri}>
-                                    READ
-                                  </Link>
-                                </Button>
+                              item.type === "Author" && (
+                                <BookTitleName>{item.person}</BookTitleName>
                               )
                           )}
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Paper>
-              </>
-            )
-        )}
-    </Container>
+                        </div>
+                      </BookInfoContainer>
+                      <div>
+                        {book.resources.map(
+                          item =>
+                            item.type.includes("text/html" && "htm") &&
+                            item.uri.includes(".htm") && (
+                              <Button variant="outlined">
+                                <Link
+                                  underline="none"
+                                  target="blank"
+                                  href={item.uri}>
+                                  READ BOOK
+                                </Link>
+                              </Button>
+                            )
+                        )}
+                      </div>
+                    </BookContainer>
+                  </Paper>
+                </>
+              )
+          )}
+      </BooksContainer>
+    </PageWrapper>
   );
 };
 
