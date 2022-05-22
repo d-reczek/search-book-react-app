@@ -5,7 +5,20 @@ import ChangePageButton from "./change-page-button";
 import BookView from "./book-view";
 import ProgressCircle from "./progress-circle";
 import { CircularProgress } from "@mui/material";
+import styled from "styled-components";
+import { ThemeProvider } from "styled-components";
 
+const ChangePageButtonContainer = styled.div`
+  position: fixed;
+  left: ${props => props.theme.left};
+  right: ${props => props.theme.right};
+`;
+const leftPosition = {
+  left: "15px",
+};
+const rightPosition = {
+  right: "15px",
+};
 const BooksView = () => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,20 +66,27 @@ const BooksView = () => {
         <ProgressCircle height="100vh" />
       ) : (
         <PageWrapper>
-          {backPageLoading ? (
-            <ProgressCircle />
-          ) : (
-            <ChangePageButton handleClick={handleBackPage} type="back" />
-          )}
+          <ChangePageButtonContainer theme={leftPosition}>
+            {backPageLoading ? (
+              <ProgressCircle />
+            ) : (
+              <ChangePageButton handleClick={handleBackPage} type="back" />
+            )}
+          </ChangePageButtonContainer>
+
           <section>
             <BookView data={data} />
           </section>
-          {forwardPageLoading ? (
-            <ProgressCircle />
-          ) : (
-            <ChangePageButton handleClick={handleForwardPage} type="forward" />
-          )}
-          {/* <ProgressCircle /> */}
+          <ChangePageButtonContainer theme={rightPosition}>
+            {forwardPageLoading ? (
+              <ProgressCircle />
+            ) : (
+              <ChangePageButton
+                handleClick={handleForwardPage}
+                type="forward"
+              />
+            )}
+          </ChangePageButtonContainer>
         </PageWrapper>
       )}
     </>

@@ -4,7 +4,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 15px;
+  margin: 15px auto;
 `;
 
 const PageWrapper = ({ children }) => {

@@ -19,6 +19,7 @@ const BooksContainer = styled(MainStyles)`
   gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
+  margin: 0 50px;
 `;
 
 const BookContainer = styled(MainStyles)`
@@ -53,7 +54,7 @@ const BookView = ({ data }) => {
                 <Paper
                   sx={{
                     p: 2,
-                    width: "500px",
+                    width: "450px",
                   }}>
                   <BookContainer>
                     <BookInfoContainer>
