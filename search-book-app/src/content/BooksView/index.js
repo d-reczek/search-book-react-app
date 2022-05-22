@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import styled from "styled-components";
 import PageWrapper from "../../common";
+import ChangePageButton from "./change-page-button";
 
 const Img = materialUIStyled("img")({
   margin: "0px",
@@ -68,6 +69,7 @@ const BooksView = () => {
   console.log(data);
   return (
     <PageWrapper>
+      <ChangePageButton type="back" />
       <BooksContainer>
         {Array.isArray(data) &&
           data.map(
@@ -123,6 +125,7 @@ const BooksView = () => {
               )
           )}
       </BooksContainer>
+      <ChangePageButton type="forward" />
     </PageWrapper>
   );
 };
