@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
-import { styled as materialUIStyled } from "@mui/material/styles";
-
 import PageWrapper from "../../common/page-wrapper";
 import ChangePageButton from "./change-page-button";
-
 import BookView from "./book-view";
 import ProgressCircle from "./progress-circle";
+import { CircularProgress } from "@mui/material";
 
 const BooksView = () => {
   const [data, setData] = useState(null);
@@ -22,7 +19,6 @@ const BooksView = () => {
   const fetchData = page => {
     axios(`https://gnikdroy.pythonanywhere.com/api/book/?page=${page}`).then(
       res => {
-        console.log(res);
         setData(res.data.results);
         setIsLoading(false);
         setForwardPageLoading(false);
@@ -54,7 +50,7 @@ const BooksView = () => {
   return (
     <>
       {isLoading ? (
-        <ProgressCircle />
+        <ProgressCircle height="100vh" />
       ) : (
         <PageWrapper>
           {backPageLoading ? (
@@ -69,8 +65,8 @@ const BooksView = () => {
             <ProgressCircle />
           ) : (
             <ChangePageButton handleClick={handleForwardPage} type="forward" />
-            // <ProgressCircle />
           )}
+          {/* <ProgressCircle /> */}
         </PageWrapper>
       )}
     </>

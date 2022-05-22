@@ -1,15 +1,14 @@
 import { CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
 
-const ProgressCircle = () => {
+const ProgressCircle = ({ height }) => {
   return (
     <Box
       sx={{
+        margin: "0 24px",
         padding: "6px 8px",
-        margin: "20px",
-        marginTop: "0",
         display: "flex",
-        height: "100vh",
+        height: `${height}`,
         justifyContent: "center",
         alignItems: "center",
       }}>
