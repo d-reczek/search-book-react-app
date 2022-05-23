@@ -4,9 +4,7 @@ import PageWrapper from "../../common/page-wrapper";
 import ChangePageButton from "./change-page-button";
 import BookView from "./book-view";
 import ProgressCircle from "./progress-circle";
-import { CircularProgress } from "@mui/material";
 import styled from "styled-components";
-import { ThemeProvider } from "styled-components";
 
 const ChangePageButtonContainer = styled.div`
   position: fixed;
@@ -25,48 +23,58 @@ const BooksView = () => {
   const [forwardPageLoading, setForwardPageLoading] = useState(false);
   const [backPageLoading, setBackPageLoading] = useState(false);
   const [page, setPage] = useState(1);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   useEffect(() => {
     fetchData(page);
   }, [page]);
 
   const fetchData = page => {
-    axios(`https://gnikdroy.pythonanywhere.com/api/book/?page=${page}`).then(
-      res => {
+    axios(`https://gnikdroy.pythonanywhere.com/api/book/?page=${page}`)
+      .then(res => {
         setData(res.data.results);
         setIsLoading(false);
         setForwardPageLoading(false);
         setBackPageLoading(false);
-      }
-    );
+      })
+      .catch(err => {
+        setError(true);
+        setIsLoading(false);
+        setErrorMessage(err.message);
+        console.log("Error", err.message);
+      });
   };
 
   let count = page;
   const handleForwardPage = () => {
+    setForwardPageLoading(true);
     if (page === 6578) {
-      count = page;
+      setPage(1);
     } else {
       count += 1;
       setPage(count);
-      setForwardPageLoading(true);
     }
   };
   const handleBackPage = () => {
+    setBackPageLoading(true);
     if (count === 1) {
-      count = page;
+      setPage(6578);
     } else {
       count -= 1;
       setPage(count);
-      setBackPageLoading(true);
     }
   };
   console.log(data);
+
   return (
     <>
       {isLoading ? (
         <ProgressCircle height="100vh" />
       ) : (
         <PageWrapper>
-          <ChangePageButtonContainer theme={leftPosition}>
+          <ChangePageButtonContainer
+            theme={leftPosition}
+            style={{ display: `${error ? "none" : "inherit"}` }}>
             {backPageLoading ? (
               <ProgressCircle />
             ) : (
@@ -75,9 +83,11 @@ const BooksView = () => {
           </ChangePageButtonContainer>
 
           <section>
-            <BookView data={data} />
+            <BookView data={data} error={error} errorMessage={errorMessage} />
           </section>
-          <ChangePageButtonContainer theme={rightPosition}>
+          <ChangePageButtonContainer
+            style={{ display: `${error ? "none" : "inherit"}` }}
+            theme={rightPosition}>
             {forwardPageLoading ? (
               <ProgressCircle />
             ) : (

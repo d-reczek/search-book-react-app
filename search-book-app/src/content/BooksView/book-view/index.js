@@ -20,6 +20,7 @@ const BooksContainer = styled(MainStyles)`
   flex-wrap: wrap;
   justify-content: center;
   margin: 0 50px;
+  font-size: 100px;
 `;
 
 const BookContainer = styled(MainStyles)`
@@ -31,7 +32,6 @@ const BookContainer = styled(MainStyles)`
 const BookInfoContainer = styled(MainStyles)`
   gap: 30px;
   width: 100%;
-  // justify-content: space-evenly;
 `;
 
 const BookInfoParagraph = styled.span`
@@ -42,8 +42,26 @@ const BookTitleName = styled.h2`
   font-size: 20px;
   font-weight: bold;
 `;
+const ErrorContainer = styled(BooksContainer)`
+  font-size: 50px;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+`;
 
-const BookView = ({ data }) => {
+const BookView = ({ data, error, errorMessage }) => {
+  if (error) {
+    return (
+      <ErrorContainer>
+        <p>
+          Error
+          <br></br>
+          {errorMessage}
+        </p>
+      </ErrorContainer>
+    );
+  }
+
   return (
     <BooksContainer>
       {Array.isArray(data) &&
