@@ -20,7 +20,6 @@ const BooksContainer = styled(MainStyles)`
   flex-wrap: wrap;
   justify-content: center;
   margin: 0 50px;
-  font-size: 100px;
 `;
 
 const BookContainer = styled(MainStyles)`
