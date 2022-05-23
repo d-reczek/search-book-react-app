@@ -1,5 +1,7 @@
+import BooksView from "./BooksView";
+
 const Content = () => {
-  return <>Hello world</>;
+  return <BooksView />;
 };
 
 export default Content;
