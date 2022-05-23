@@ -5,6 +5,8 @@ import Link from "@mui/material/Link";
 import styled from "styled-components";
 
 import { Grow } from "@mui/material";
+import BookCover from "../images/default_book_cover.jpg";
+
 const Img = materialUIStyled("img")({
   margin: "0px",
   display: "block",
@@ -15,7 +17,7 @@ const MainStyles = styled.div`
   display: flex;
 `;
 const BooksContainer = styled(MainStyles)`
-  height: 100vh;
+  //   height: 100vh;
   gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
@@ -86,6 +88,9 @@ const BookView = ({ data, error, errorMessage }) => {
                             />
                           )
                       )}
+                      {book.resources.length < 11 && (
+                        <Img alt="book-cover" src={BookCover} />
+                      )}
                       <div>
                         <BookInfoParagraph>Book title:</BookInfoParagraph>
                         <BookTitleName>{book.title}</BookTitleName>
@@ -104,7 +109,7 @@ const BookView = ({ data, error, errorMessage }) => {
                     <div>
                       {book.resources.map(
                         item =>
-                          item.type.includes("text/html" && "htm") &&
+                          item.type.includes("text/html") &&
                           item.uri.includes(".htm") && (
                             <Button key={item.id} variant="outlined">
                               <Link

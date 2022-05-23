@@ -8,6 +8,7 @@ import styled from "styled-components";
 
 const ChangePageButtonContainer = styled.div`
   position: fixed;
+  top: 50%;
   left: ${props => props.theme.left};
   right: ${props => props.theme.right};
 `;
