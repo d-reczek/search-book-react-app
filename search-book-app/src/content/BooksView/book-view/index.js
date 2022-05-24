@@ -52,6 +52,9 @@ const ErrorContainer = styled(BooksContainer)`
   height: 100vh;
   text-align: center;
 `;
+const ButtonsContainer = styled(MainStyles)`
+  gap: 20px;
+`;
 
 const BookView = ({ data, setData, error, errorMessage }) => {
   const [favorites, setFavorites] = useState([]);
@@ -131,7 +134,7 @@ const BookView = ({ data, setData, error, errorMessage }) => {
                         )}
                       </div>
                     </BookInfoContainer>
-                    <div>
+                    <ButtonsContainer>
                       {book.resources.map(
                         item =>
                           item.type.includes("text/html") &&
@@ -158,7 +161,7 @@ const BookView = ({ data, setData, error, errorMessage }) => {
                             />
                           )
                       )}
-                    </div>
+                    </ButtonsContainer>
                   </BookContainer>
                 </Paper>
               </Grow>
