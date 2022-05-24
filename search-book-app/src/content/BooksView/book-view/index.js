@@ -102,11 +102,15 @@ const BookView = ({ data, setData, error, errorMessage }) => {
                         item =>
                           item.type === "image/jpeg" &&
                           item.uri.includes("medium") && (
-                            <Img
-                              key={item.id}
-                              alt="book-cover"
-                              src={item.uri}
-                            />
+                            <Link
+                              target="blank"
+                              href={`https://www.gutenberg.org/ebooks/${book.id}`}>
+                              <Img
+                                key={item.id}
+                                alt="book-cover"
+                                src={item.uri}
+                              />
+                            </Link>
                           )
                       )}
                       {book.resources.length < 11 && (
@@ -137,7 +141,7 @@ const BookView = ({ data, setData, error, errorMessage }) => {
                                 underline="none"
                                 target="blank"
                                 href={item.uri}>
-                                READ BOOK
+                                QUICK READ BOOK
                               </Link>
                             </Button>
                           )
