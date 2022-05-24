@@ -6,6 +6,8 @@ import styled from "styled-components";
 
 import { Grow } from "@mui/material";
 import BookCover from "../images/default_book_cover.jpg";
+import FavouriteBook from "../favourite-book";
+import { useEffect, useState } from "react";
 
 const Img = materialUIStyled("img")({
   margin: "0px",
@@ -33,6 +35,7 @@ const BookContainer = styled(MainStyles)`
 const BookInfoContainer = styled(MainStyles)`
   gap: 30px;
   width: 100%;
+  margin: 10px;
 `;
 
 const BookInfoParagraph = styled.span`
@@ -50,7 +53,18 @@ const ErrorContainer = styled(BooksContainer)`
   text-align: center;
 `;
 
-const BookView = ({ data, error, errorMessage }) => {
+const BookView = ({ data, setData, error, errorMessage }) => {
+  const [favorites, setFavorites] = useState([]);
+
+  useEffect(() => {
+    setFavorites(data);
+  }, [data]);
+
+  useEffect(() => {
+    console.log(favorites);
+    console.log(data);
+  }, [favorites]);
+
   if (error) {
     return (
       <ErrorContainer>
@@ -63,6 +77,13 @@ const BookView = ({ data, error, errorMessage }) => {
     );
   }
 
+  function handleFavorite(id) {
+    const newFavorites = favorites.map(item => {
+      return item.id === id ? { ...item, favorite: !item.favorite } : item;
+    });
+
+    setFavorites(newFavorites);
+  }
   return (
     <BooksContainer>
       {Array.isArray(data) &&
@@ -119,6 +140,18 @@ const BookView = ({ data, error, errorMessage }) => {
                                 READ BOOK
                               </Link>
                             </Button>
+                          )
+                      )}
+                      {favorites.map(
+                        (item, i) =>
+                          book.id === item.id && (
+                            <FavouriteBook
+                              key={item.id}
+                              add={item.favorite}
+                              handleClick={() => {
+                                handleFavorite(item.id);
+                              }}
+                            />
                           )
                       )}
                     </div>

@@ -65,7 +65,7 @@ const BooksView = () => {
       setPage(count);
     }
   };
-  console.log(data);
+  // console.log("data", data);
 
   return (
     <>
@@ -84,7 +84,12 @@ const BooksView = () => {
           </ChangePageButtonContainer>
 
           <section>
-            <BookView data={data} error={error} errorMessage={errorMessage} />
+            <BookView
+              setData={setData}
+              data={data}
+              error={error}
+              errorMessage={errorMessage}
+            />
           </section>
           <ChangePageButtonContainer
             style={{ display: `${error ? "none" : "inherit"}` }}
