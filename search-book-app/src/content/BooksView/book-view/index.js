@@ -4,10 +4,10 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import styled from "styled-components";
 
-import { Grow } from "@mui/material";
+import { Grow, Slide, Tooltip, Zoom } from "@mui/material";
 import BookCover from "../images/default_book_cover.jpg";
 import FavouriteBookButton from "../favourite-book-button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AddFavouriteBookButton from "../add-favourite-book-button";
 
 const Img = materialUIStyled("img")({
@@ -133,12 +133,17 @@ const BookView = ({ data, error, errorMessage }) => {
                         item =>
                           item.type === "image/jpeg" &&
                           item.uri.includes("medium") && (
-                            <Link
+                            <Tooltip
                               key={item.id}
-                              target="blank"
-                              href={`https://www.gutenberg.org/ebooks/${book.id}`}>
-                              <Img alt="book-cover" src={item.uri} />
-                            </Link>
+                              title="Information about book"
+                              placement="left"
+                              TransitionComponent={Zoom}>
+                              <Link
+                                target="blank"
+                                href={`https://www.gutenberg.org/ebooks/${book.id}`}>
+                                <Img alt="book-cover" src={item.uri} />
+                              </Link>
+                            </Tooltip>
                           )
                       )}
                       {book.resources.length < 11 && (
@@ -159,48 +164,50 @@ const BookView = ({ data, error, errorMessage }) => {
                         )}
                       </div>
                     </BookInfoContainer>
-                    <ButtonsContainer>
-                      {book.resources.map(
-                        item =>
-                          item.type.includes("text/html") &&
-                          item.uri.includes(".htm") && (
-                            <Button key={item.id} variant="outlined">
-                              <Link
-                                underline="none"
-                                target="blank"
-                                href={item.uri}>
-                                QUICK READ BOOK
-                              </Link>
-                            </Button>
-                          )
-                      )}
-                      {favorites.map(
-                        (item, i) =>
-                          book.id === item.id && (
-                            <AddFavouriteBookButton
-                              disable={item.favorite}
-                              key={item.id}
-                              add={false}
-                              handleClick={() => {
-                                handleFavorite(item.id);
-                              }}
-                            />
-                          )
-                      )}
-                      {favoritesList.map(
-                        item =>
-                          book.id === item.id &&
-                          item.favorite && (
-                            <FavouriteBookButton
-                              key={item.id}
-                              add={item.favorite}
-                              handleClick={() => {
-                                handleDelete(item.id);
-                              }}
-                            />
-                          )
-                      )}
-                    </ButtonsContainer>
+                    <Zoom in timeout={500}>
+                      <ButtonsContainer>
+                        {book.resources.map(
+                          item =>
+                            item.type.includes("text/html") &&
+                            item.uri.includes(".htm") && (
+                              <Button key={item.id} variant="outlined">
+                                <Link
+                                  underline="none"
+                                  target="blank"
+                                  href={item.uri}>
+                                  READ BOOK
+                                </Link>
+                              </Button>
+                            )
+                        )}
+                        {favorites.map(
+                          (item, i) =>
+                            book.id === item.id && (
+                              <AddFavouriteBookButton
+                                disable={item.favorite}
+                                key={item.id}
+                                add={false}
+                                handleClick={() => {
+                                  handleFavorite(item.id);
+                                }}
+                              />
+                            )
+                        )}
+                        {favoritesList.map(
+                          item =>
+                            book.id === item.id &&
+                            item.favorite && (
+                              <FavouriteBookButton
+                                key={item.id}
+                                add={item.favorite}
+                                handleClick={() => {
+                                  handleDelete(item.id);
+                                }}
+                              />
+                            )
+                        )}
+                      </ButtonsContainer>
+                    </Zoom>
                   </BookContainer>
                 </Paper>
               </Grow>
