@@ -72,6 +72,9 @@ const BookView = ({ data, error, errorMessage }) => {
   }, []);
 
   useEffect(() => {
+    if (storage === null) {
+      setFavoritesList([]);
+    }
     if (storage !== []) {
       localStorage.setItem("favorites", JSON.stringify(favoritesList));
     }
