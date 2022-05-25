@@ -9,10 +9,9 @@ const InputContainer = styled.div`
   margin: 15px auto;
 `;
 
-const SearchBar = ({ setInputValue, searchBooks, inputValue }) => {
+const SearchBar = ({ setInputValue, inputValue }) => {
   const handleOnChange = value => {
     setInputValue(value.toLowerCase());
-    // searchBooks();
   };
 
   return (

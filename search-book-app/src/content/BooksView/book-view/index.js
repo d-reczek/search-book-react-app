@@ -4,10 +4,10 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import styled from "styled-components";
 
-import { Grow, Slide, Tooltip, Zoom } from "@mui/material";
+import { Grow, Tooltip, Zoom } from "@mui/material";
 import BookCover from "../images/default_book_cover.jpg";
 import FavouriteBookButton from "../favourite-book-button";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import AddFavouriteBookButton from "../add-favourite-book-button";
 
 const Img = materialUIStyled("img")({
