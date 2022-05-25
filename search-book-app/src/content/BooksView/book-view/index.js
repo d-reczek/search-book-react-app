@@ -56,18 +56,30 @@ const ButtonsContainer = styled(MainStyles)`
   gap: 20px;
 `;
 
-const BookView = ({ data, setData, error, errorMessage }) => {
+const BookView = ({ data, error, errorMessage }) => {
   const [favorites, setFavorites] = useState([]);
+  const [favoritesList, setFavoritesList] = useState([]);
+  const storage = JSON.parse(localStorage.getItem("favorites"));
 
   useEffect(() => {
     setFavorites(data);
   }, [data]);
+  useEffect(() => {
+    if (storage !== []) {
+      setFavoritesList(storage);
+    }
+    console.log(storage);
+  }, []);
 
   useEffect(() => {
-    console.log(favorites);
-    console.log(data);
-  }, [favorites]);
-
+    if (storage !== []) {
+      localStorage.setItem("favorites", JSON.stringify(favoritesList));
+    }
+    if (storage === []) {
+      localStorage.setItem("favorites", JSON.stringify(favoritesList));
+    }
+    console.log(storage);
+  }, [favoritesList]);
   if (error) {
     return (
       <ErrorContainer>
@@ -84,9 +96,26 @@ const BookView = ({ data, setData, error, errorMessage }) => {
     const newFavorites = favorites.map(item => {
       return item.id === id ? { ...item, favorite: !item.favorite } : item;
     });
+    let array = [];
+    let object = { id: id, favorite: true };
+    array = [...favoritesList, object];
+    setFavoritesList(array);
 
     setFavorites(newFavorites);
   }
+
+  function handleDelete(id) {
+    const newFavorites = favorites.map(item => {
+      return item.id === id ? { ...item, favorite: !item.favorite } : item;
+    });
+    let array = favoritesList.filter(item => {
+      return item.id !== id;
+    });
+
+    setFavorites(newFavorites);
+    setFavoritesList(array);
+  }
+
   return (
     <BooksContainer>
       {Array.isArray(data) &&
@@ -153,10 +182,24 @@ const BookView = ({ data, setData, error, errorMessage }) => {
                         (item, i) =>
                           book.id === item.id && (
                             <FavouriteBook
+                              disable={item.favorite}
                               key={item.id}
-                              add={item.favorite}
+                              add={false}
                               handleClick={() => {
                                 handleFavorite(item.id);
+                              }}
+                            />
+                          )
+                      )}
+                      {favoritesList.map(
+                        (item2, i) =>
+                          book.id === item2.id &&
+                          item2.favorite && (
+                            <FavouriteBook
+                              key={item2.id}
+                              add={item2.favorite}
+                              handleClick={() => {
+                                handleDelete(item2.id);
                               }}
                             />
                           )

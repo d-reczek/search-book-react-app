@@ -1,8 +1,8 @@
 import { Button, Icon } from "@mui/material";
 
-const FavouriteBook = ({ handleClick, add }) => {
+const FavouriteBook = ({ handleClick, add, disable }) => {
   return (
-    <Button onClick={handleClick}>
+    <Button disabled={disable} onClick={handleClick}>
       <Icon sx={{ color: "red" }}>{add ? "favorite" : "favorite_border"}</Icon>
     </Button>
   );
