@@ -6,8 +6,9 @@ import styled from "styled-components";
 
 import { Grow } from "@mui/material";
 import BookCover from "../images/default_book_cover.jpg";
-import FavouriteBook from "../favourite-book";
+import FavouriteBookButton from "../favourite-book-button";
 import { useEffect, useState } from "react";
+import AddFavouriteBookButton from "../add-favourite-book-button";
 
 const Img = materialUIStyled("img")({
   margin: "0px",
@@ -68,7 +69,6 @@ const BookView = ({ data, error, errorMessage }) => {
     if (storage !== []) {
       setFavoritesList(storage);
     }
-    console.log(storage);
   }, []);
 
   useEffect(() => {
@@ -78,7 +78,6 @@ const BookView = ({ data, error, errorMessage }) => {
     if (storage === []) {
       localStorage.setItem("favorites", JSON.stringify(favoritesList));
     }
-    console.log(storage);
   }, [favoritesList]);
   if (error) {
     return (
@@ -135,13 +134,10 @@ const BookView = ({ data, error, errorMessage }) => {
                           item.type === "image/jpeg" &&
                           item.uri.includes("medium") && (
                             <Link
+                              key={item.id}
                               target="blank"
                               href={`https://www.gutenberg.org/ebooks/${book.id}`}>
-                              <Img
-                                key={item.id}
-                                alt="book-cover"
-                                src={item.uri}
-                              />
+                              <Img alt="book-cover" src={item.uri} />
                             </Link>
                           )
                       )}
@@ -181,7 +177,7 @@ const BookView = ({ data, error, errorMessage }) => {
                       {favorites.map(
                         (item, i) =>
                           book.id === item.id && (
-                            <FavouriteBook
+                            <AddFavouriteBookButton
                               disable={item.favorite}
                               key={item.id}
                               add={false}
@@ -192,14 +188,14 @@ const BookView = ({ data, error, errorMessage }) => {
                           )
                       )}
                       {favoritesList.map(
-                        (item2, i) =>
-                          book.id === item2.id &&
-                          item2.favorite && (
-                            <FavouriteBook
-                              key={item2.id}
-                              add={item2.favorite}
+                        item =>
+                          book.id === item.id &&
+                          item.favorite && (
+                            <FavouriteBookButton
+                              key={item.id}
+                              add={item.favorite}
                               handleClick={() => {
-                                handleDelete(item2.id);
+                                handleDelete(item.id);
                               }}
                             />
                           )
