@@ -5,6 +5,8 @@ import ChangePageButton from "./change-page-button";
 import BookView from "./book-view";
 import ProgressCircle from "./progress-circle";
 import styled from "styled-components";
+import SearchBar from "./search-bar";
+import { getAccordionDetailsUtilityClass } from "@mui/material";
 
 const ChangePageButtonContainer = styled.div`
   position: fixed;
@@ -26,12 +28,29 @@ const BooksView = () => {
   const [page, setPage] = useState(1);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  useEffect(() => {
-    fetchData(page);
-  }, [page]);
+  const [inputValue, setInputValue] = useState("");
+  const [getData, setGetData] = useState(true);
 
+  // useEffect(() => {
+  //   fetchData(page);
+  // }, [page, inputValue]);
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      fetchData(page);
+      console.log(
+        `I can see you're not typing. I can use "${inputValue}" now!`
+      );
+    }, 500);
+    return () => clearTimeout(timeoutId);
+  }, [page, inputValue]);
   const fetchData = page => {
-    axios(`https://gnikdroy.pythonanywhere.com/api/book/?page=${page}`)
+    axios(
+      `${
+        getData
+          ? `https://gnikdroy.pythonanywhere.com/api/book/?page=${page}`
+          : `https://gnikdroy.pythonanywhere.com/api/book/?search=${inputValue}`
+      }`
+    )
       .then(res => {
         setData(res.data.results);
         setIsLoading(false);
@@ -65,45 +84,57 @@ const BooksView = () => {
       setPage(count);
     }
   };
-  // console.log("data", data);
+  const searchBooks = () => {
+    if (inputValue === "") {
+      setGetData(false);
+    }
+  };
 
+  console.log("getdata", getData);
   return (
     <>
       {isLoading ? (
         <ProgressCircle height="100vh" />
       ) : (
-        <PageWrapper>
-          <ChangePageButtonContainer
-            theme={leftPosition}
-            style={{ display: `${error ? "none" : "inherit"}` }}>
-            {backPageLoading ? (
-              <ProgressCircle />
-            ) : (
-              <ChangePageButton handleClick={handleBackPage} type="back" />
-            )}
-          </ChangePageButtonContainer>
+        <>
+          <SearchBar
+            searchBooks={searchBooks}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+          />
+          <PageWrapper>
+            <ChangePageButtonContainer
+              theme={leftPosition}
+              style={{ display: `${error ? "none" : "inherit"}` }}>
+              {backPageLoading ? (
+                <ProgressCircle />
+              ) : (
+                <ChangePageButton handleClick={handleBackPage} type="back" />
+              )}
+            </ChangePageButtonContainer>
 
-          <section>
-            <BookView
-              setData={setData}
-              data={data}
-              error={error}
-              errorMessage={errorMessage}
-            />
-          </section>
-          <ChangePageButtonContainer
-            style={{ display: `${error ? "none" : "inherit"}` }}
-            theme={rightPosition}>
-            {forwardPageLoading ? (
-              <ProgressCircle />
-            ) : (
-              <ChangePageButton
-                handleClick={handleForwardPage}
-                type="forward"
+            <section>
+              <BookView
+                setData={setData}
+                data={data}
+                error={error}
+                errorMessage={errorMessage}
               />
-            )}
-          </ChangePageButtonContainer>
-        </PageWrapper>
+            </section>
+            <ChangePageButtonContainer
+              style={{ display: `${error ? "none" : "inherit"}` }}
+              theme={rightPosition}>
+              {forwardPageLoading ? (
+                <ProgressCircle />
+              ) : (
+                <ChangePageButton
+                  handleClick={handleForwardPage}
+                  type="forward"
+                />
+              )}
+            </ChangePageButtonContainer>
+          </PageWrapper>
+        </>
       )}
     </>
   );
