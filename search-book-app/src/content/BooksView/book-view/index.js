@@ -105,7 +105,7 @@ const BookView = ({ data, error, errorMessage }) => {
 
   function handleDelete(id) {
     const newFavorites = favorites.map(item => {
-      return item.id === id ? { ...item, favorite: !item.favorite } : item;
+      return item.id === id ? { ...item, favorite: false } : item;
     });
     let array = favoritesList.filter(item => {
       return item.id !== id;
