@@ -5,12 +5,15 @@ import ChangePageButton from "./change-page-button";
 import BookView from "./book-view";
 import ProgressCircle from "./progress-circle";
 import styled from "styled-components";
+import SearchBar from "./search-bar";
 
 const ChangePageButtonContainer = styled.div`
   position: fixed;
   top: 50%;
   left: ${props => props.theme.left};
   right: ${props => props.theme.right};
+  display: ${props => (props.inputValue ? "none" : "inherit")};
+  // display: ${props => (props.error ? "none" : "inherit")};
 `;
 const leftPosition = {
   left: "15px",
@@ -18,6 +21,14 @@ const leftPosition = {
 const rightPosition = {
   right: "15px",
 };
+
+const NoBook = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  font-size: 20px;
+`;
 const BooksView = () => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,17 +37,37 @@ const BooksView = () => {
   const [page, setPage] = useState(1);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [inputValue, setInputValue] = useState(undefined);
+  const [response, setResponse] = useState(null);
+  const url1 = "https://gnikdroy.pythonanywhere.com/api/book/?page=";
+  const url2 = `https://gnikdroy.pythonanywhere.com/api/book/?search=${inputValue}`;
+
   useEffect(() => {
-    fetchData(page);
+    fetchData(url1, page);
   }, [page]);
 
-  const fetchData = page => {
-    axios(`https://gnikdroy.pythonanywhere.com/api/book/?page=${page}`)
+  useEffect(() => {
+    if (inputValue === "") {
+      fetchData(url1, page);
+    }
+    const timeoutId = setTimeout(() => {
+      if (inputValue) {
+        fetchData(url2);
+        setResponse(null);
+      }
+    }, 800);
+    return () => clearTimeout(timeoutId);
+  }, [inputValue]);
+
+  const fetchData = (url, page = "") => {
+    axios(`${url}${page}`)
       .then(res => {
         setData(res.data.results);
         setIsLoading(false);
         setForwardPageLoading(false);
         setBackPageLoading(false);
+        console.log("response", res.status);
+        setResponse(res.status);
       })
       .catch(err => {
         setError(true);
@@ -65,45 +96,60 @@ const BooksView = () => {
       setPage(count);
     }
   };
-  // console.log("data", data);
 
+  if (inputValue && response !== 200) {
+    return (
+      <div>
+        <SearchBar inputValue={inputValue} setInputValue={setInputValue} />
+        <ProgressCircle height="100vh" />;
+      </div>
+    );
+  }
+  console.log("data", data);
   return (
     <>
       {isLoading ? (
         <ProgressCircle height="100vh" />
       ) : (
-        <PageWrapper>
-          <ChangePageButtonContainer
-            theme={leftPosition}
-            style={{ display: `${error ? "none" : "inherit"}` }}>
-            {backPageLoading ? (
-              <ProgressCircle />
-            ) : (
-              <ChangePageButton handleClick={handleBackPage} type="back" />
-            )}
-          </ChangePageButtonContainer>
+        <>
+          <SearchBar inputValue={inputValue} setInputValue={setInputValue} />
+          <PageWrapper>
+            <ChangePageButtonContainer
+              inputValue={inputValue}
+              theme={leftPosition}>
+              {backPageLoading ? (
+                <ProgressCircle />
+              ) : (
+                <ChangePageButton handleClick={handleBackPage} type="back" />
+              )}
+            </ChangePageButtonContainer>
 
-          <section>
-            <BookView
-              setData={setData}
-              data={data}
-              error={error}
-              errorMessage={errorMessage}
-            />
-          </section>
-          <ChangePageButtonContainer
-            style={{ display: `${error ? "none" : "inherit"}` }}
-            theme={rightPosition}>
-            {forwardPageLoading ? (
-              <ProgressCircle />
-            ) : (
-              <ChangePageButton
-                handleClick={handleForwardPage}
-                type="forward"
-              />
-            )}
-          </ChangePageButtonContainer>
-        </PageWrapper>
+            <section>
+              {data.length === 0 ? (
+                <NoBook>There is no such thing </NoBook>
+              ) : (
+                <BookView
+                  setData={setData}
+                  data={data}
+                  error={error}
+                  errorMessage={errorMessage}
+                />
+              )}
+            </section>
+            <ChangePageButtonContainer
+              inputValue={inputValue}
+              theme={rightPosition}>
+              {forwardPageLoading ? (
+                <ProgressCircle />
+              ) : (
+                <ChangePageButton
+                  handleClick={handleForwardPage}
+                  type="forward"
+                />
+              )}
+            </ChangePageButtonContainer>
+          </PageWrapper>
+        </>
       )}
     </>
   );

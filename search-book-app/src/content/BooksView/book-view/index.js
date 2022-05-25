@@ -4,10 +4,11 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import styled from "styled-components";
 
-import { Grow } from "@mui/material";
+import { Grow, Slide, Tooltip, Zoom } from "@mui/material";
 import BookCover from "../images/default_book_cover.jpg";
-import FavouriteBook from "../favourite-book";
-import { useEffect, useState } from "react";
+import FavouriteBookButton from "../favourite-book-button";
+import { useEffect, useRef, useState } from "react";
+import AddFavouriteBookButton from "../add-favourite-book-button";
 
 const Img = materialUIStyled("img")({
   margin: "0px",
@@ -56,18 +57,31 @@ const ButtonsContainer = styled(MainStyles)`
   gap: 20px;
 `;
 
-const BookView = ({ data, setData, error, errorMessage }) => {
+const BookView = ({ data, error, errorMessage }) => {
   const [favorites, setFavorites] = useState([]);
+  const [favoritesList, setFavoritesList] = useState([]);
+  const storage = JSON.parse(localStorage.getItem("favorites"));
 
   useEffect(() => {
     setFavorites(data);
   }, [data]);
+  useEffect(() => {
+    if (storage !== []) {
+      setFavoritesList(storage);
+    }
+  }, []);
 
   useEffect(() => {
-    console.log(favorites);
-    console.log(data);
-  }, [favorites]);
-
+    if (storage === null) {
+      setFavoritesList([]);
+    }
+    if (storage !== []) {
+      localStorage.setItem("favorites", JSON.stringify(favoritesList));
+    }
+    if (storage === []) {
+      localStorage.setItem("favorites", JSON.stringify(favoritesList));
+    }
+  }, [favoritesList]);
   if (error) {
     return (
       <ErrorContainer>
@@ -84,9 +98,26 @@ const BookView = ({ data, setData, error, errorMessage }) => {
     const newFavorites = favorites.map(item => {
       return item.id === id ? { ...item, favorite: !item.favorite } : item;
     });
+    let array = [];
+    let object = { id: id, favorite: true };
+    array = [...favoritesList, object];
+    setFavoritesList(array);
 
     setFavorites(newFavorites);
   }
+
+  function handleDelete(id) {
+    const newFavorites = favorites.map(item => {
+      return item.id === id ? { ...item, favorite: false } : item;
+    });
+    let array = favoritesList.filter(item => {
+      return item.id !== id;
+    });
+
+    setFavorites(newFavorites);
+    setFavoritesList(array);
+  }
+
   return (
     <BooksContainer>
       {Array.isArray(data) &&
@@ -105,15 +136,17 @@ const BookView = ({ data, setData, error, errorMessage }) => {
                         item =>
                           item.type === "image/jpeg" &&
                           item.uri.includes("medium") && (
-                            <Link
-                              target="blank"
-                              href={`https://www.gutenberg.org/ebooks/${book.id}`}>
-                              <Img
-                                key={item.id}
-                                alt="book-cover"
-                                src={item.uri}
-                              />
-                            </Link>
+                            <Tooltip
+                              key={item.id}
+                              title="Information about book"
+                              placement="left"
+                              TransitionComponent={Zoom}>
+                              <Link
+                                target="blank"
+                                href={`https://www.gutenberg.org/ebooks/${book.id}`}>
+                                <Img alt="book-cover" src={item.uri} />
+                              </Link>
+                            </Tooltip>
                           )
                       )}
                       {book.resources.length < 11 && (
@@ -134,34 +167,50 @@ const BookView = ({ data, setData, error, errorMessage }) => {
                         )}
                       </div>
                     </BookInfoContainer>
-                    <ButtonsContainer>
-                      {book.resources.map(
-                        item =>
-                          item.type.includes("text/html") &&
-                          item.uri.includes(".htm") && (
-                            <Button key={item.id} variant="outlined">
-                              <Link
-                                underline="none"
-                                target="blank"
-                                href={item.uri}>
-                                QUICK READ BOOK
-                              </Link>
-                            </Button>
-                          )
-                      )}
-                      {favorites.map(
-                        (item, i) =>
-                          book.id === item.id && (
-                            <FavouriteBook
-                              key={item.id}
-                              add={item.favorite}
-                              handleClick={() => {
-                                handleFavorite(item.id);
-                              }}
-                            />
-                          )
-                      )}
-                    </ButtonsContainer>
+                    <Zoom in timeout={500}>
+                      <ButtonsContainer>
+                        {book.resources.map(
+                          item =>
+                            item.type.includes("text/html") &&
+                            item.uri.includes(".htm") && (
+                              <Button key={item.id} variant="outlined">
+                                <Link
+                                  underline="none"
+                                  target="blank"
+                                  href={item.uri}>
+                                  READ BOOK
+                                </Link>
+                              </Button>
+                            )
+                        )}
+                        {favorites.map(
+                          (item, i) =>
+                            book.id === item.id && (
+                              <AddFavouriteBookButton
+                                disable={item.favorite}
+                                key={item.id}
+                                add={false}
+                                handleClick={() => {
+                                  handleFavorite(item.id);
+                                }}
+                              />
+                            )
+                        )}
+                        {favoritesList.map(
+                          item =>
+                            book.id === item.id &&
+                            item.favorite && (
+                              <FavouriteBookButton
+                                key={item.id}
+                                add={item.favorite}
+                                handleClick={() => {
+                                  handleDelete(item.id);
+                                }}
+                              />
+                            )
+                        )}
+                      </ButtonsContainer>
+                    </Zoom>
                   </BookContainer>
                 </Paper>
               </Grow>
