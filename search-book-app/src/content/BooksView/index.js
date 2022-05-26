@@ -6,6 +6,7 @@ import BookView from "./BookView";
 import ProgressCircle from "./ProgressCircle";
 import styled from "styled-components";
 import SearchBar from "./SearchBar";
+import ShowFavoritesBooksButton from "./ShowFavoritesBooksButton";
 
 const ChangePageButtonContainer = styled.div`
   position: fixed;
@@ -20,7 +21,11 @@ const leftPosition = {
 const rightPosition = {
   right: "15px",
 };
-
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const NoBook = styled.div`
   display: flex;
   justify-content: center;
@@ -38,6 +43,7 @@ const BooksView = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [inputValue, setInputValue] = useState(undefined);
   const [response, setResponse] = useState(null);
+  const [showFavorites, setShowFavorites] = useState(false);
   const urlToShowBooks = "https://gnikdroy.pythonanywhere.com/api/book/?page=";
   const urlToSearchBooks = `https://gnikdroy.pythonanywhere.com/api/book/?search=${inputValue}`;
 
@@ -48,6 +54,7 @@ const BooksView = () => {
   useEffect(() => {
     if (inputValue === "") {
       fetchData(urlToShowBooks, page);
+      setResponse(null);
     }
     const timeoutId = setTimeout(() => {
       if (inputValue) {
@@ -97,21 +104,63 @@ const BooksView = () => {
     }
   };
 
+  const handleShowFavoritesBooks = () => {
+    setShowFavorites(!showFavorites);
+  };
+
   if (inputValue && response !== 200) {
     return (
-      <div>
-        <SearchBar inputValue={inputValue} setInputValue={setInputValue} />
-        <ProgressCircle height="100vh" />;
-      </div>
+      <>
+        <Container>
+          <SearchBar inputValue={inputValue} setInputValue={setInputValue} />
+          <ShowFavoritesBooksButton
+            showFavorites={showFavorites}
+            handleClick={handleShowFavoritesBooks}
+          />
+        </Container>
+        <ProgressCircle height="100vh" />
+      </>
     );
   }
+  if (inputValue === "" && response !== 200) {
+    return (
+      <>
+        <Container>
+          <SearchBar inputValue={inputValue} setInputValue={setInputValue} />
+          <ShowFavoritesBooksButton
+            showFavorites={showFavorites}
+            handleClick={handleShowFavoritesBooks}
+          />
+        </Container>
+        <ProgressCircle height="100vh" />
+      </>
+    );
+  }
+
+  console.log("response", response);
+
+  // if (inputValue === "") {
+  //   return (
+  //     <div>
+  //       <SearchBar inputValue={inputValue} setInputValue={setInputValue} />
+  //       <ProgressCircle height="100vh" />;
+  //     </div>
+  //   );
+  // }
+
   return (
     <>
       {isLoading ? (
         <ProgressCircle height="100vh" />
       ) : (
         <>
-          <SearchBar inputValue={inputValue} setInputValue={setInputValue} />
+          <Container>
+            <SearchBar inputValue={inputValue} setInputValue={setInputValue} />
+            <ShowFavoritesBooksButton
+              showFavorites={showFavorites}
+              handleClick={handleShowFavoritesBooks}
+            />
+          </Container>
           <PageWrapper>
             <ChangePageButtonContainer
               inputValue={inputValue}
@@ -127,16 +176,15 @@ const BooksView = () => {
                 />
               )}
             </ChangePageButtonContainer>
-
             <section>
               {data.length === 0 ? (
                 <NoBook>There is no such thing </NoBook>
               ) : (
                 <BookView
-                  setData={setData}
                   data={data}
                   error={error}
                   errorMessage={errorMessage}
+                  showFavorites={showFavorites}
                 />
               )}
             </section>
