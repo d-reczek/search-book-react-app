@@ -5,8 +5,8 @@ const InputContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 90%;
-  margin: 15px auto;
+  width: 80%;
+  // margin: 15px auto;
 `;
 
 const SearchBar = ({ setInputValue, inputValue }) => {
