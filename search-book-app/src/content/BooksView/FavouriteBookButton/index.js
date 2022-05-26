@@ -1,9 +1,9 @@
 import { Button, Icon, Tooltip } from "@mui/material";
 import Zoom from "@mui/material/Zoom";
 
-const FavouriteBookButton = ({ handleClick, favBook }) => {
+const FavoriteBookButton = ({ handleClick, favBook }) => {
   return (
-    <Tooltip title="Remove from fav" placement="top" TransitionComponent={Zoom}>
+    <Tooltip title="Add to favorite" placement="top" TransitionComponent={Zoom}>
       <Button onClick={handleClick}>
         <Icon sx={{ color: "red" }}>
           {favBook ? "favorite" : "favorite_border"}
@@ -13,4 +13,4 @@ const FavouriteBookButton = ({ handleClick, favBook }) => {
   );
 };
 
-export default FavouriteBookButton;
+export default FavoriteBookButton;

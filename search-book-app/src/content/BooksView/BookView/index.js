@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 import { Grow, Tooltip, Zoom } from "@mui/material";
 import BookCover from "../images/default_book_cover.jpg";
-import FavouriteBookButton from "../FavouriteBookButton";
+import FavoriteBookButton from "../FavouriteBookButton";
 import { useEffect, useState } from "react";
 
 const Img = materialUIStyled("img")({
@@ -19,7 +19,6 @@ const MainStyles = styled.div`
   display: flex;
 `;
 const BooksContainer = styled(MainStyles)`
-  //   height: 100vh;
   gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
@@ -168,12 +167,12 @@ const BookView = ({ data, error, errorMessage }) => {
                         )}
 
                         {favoriteBooksIds.includes(book.id) ? (
-                          <FavouriteBookButton
+                          <FavoriteBookButton
                             handleClick={() => handleRemoveBookFromFav(book.id)}
                             favBook={true}
                           />
                         ) : (
-                          <FavouriteBookButton
+                          <FavoriteBookButton
                             handleClick={() => handleAddBookToFav(book.id)}
                             favBook={false}
                           />

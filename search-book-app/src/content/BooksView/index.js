@@ -38,20 +38,20 @@ const BooksView = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [inputValue, setInputValue] = useState(undefined);
   const [response, setResponse] = useState(null);
-  const url1 = "https://gnikdroy.pythonanywhere.com/api/book/?page=";
-  const url2 = `https://gnikdroy.pythonanywhere.com/api/book/?search=${inputValue}`;
+  const urlToShowBooks = "https://gnikdroy.pythonanywhere.com/api/book/?page=";
+  const urlToSearchBooks = `https://gnikdroy.pythonanywhere.com/api/book/?search=${inputValue}`;
 
   useEffect(() => {
-    fetchData(url1, page);
+    fetchData(urlToShowBooks, page);
   }, [page]);
 
   useEffect(() => {
     if (inputValue === "") {
-      fetchData(url1, page);
+      fetchData(urlToShowBooks, page);
     }
     const timeoutId = setTimeout(() => {
       if (inputValue) {
-        fetchData(url2);
+        fetchData(urlToSearchBooks);
         setResponse(null);
       }
     }, 800);
@@ -105,7 +105,6 @@ const BooksView = () => {
       </div>
     );
   }
-  console.log("data", data);
   return (
     <>
       {isLoading ? (
