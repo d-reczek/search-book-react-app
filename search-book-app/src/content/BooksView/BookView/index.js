@@ -68,7 +68,6 @@ const BookView = ({ data, error, errorMessage, showFavorites }) => {
   useEffect(() => {
     showFavorites ? setCurrentData(favoriteBooks) : setCurrentData(data);
   }, [showFavorites, data, favoriteBooks]);
-  console.log("current", currentData);
   useEffect(() => {
     if (favoriteBooksIdsStorage !== []) {
       setFavoriteBooksIds(favoriteBooksIdsStorage);
@@ -140,7 +139,6 @@ const BookView = ({ data, error, errorMessage, showFavorites }) => {
     setFavoriteBooksIds(newFavBooksId);
     setFavoriteBooks(newFavBooks);
   };
-  console.log("favbooks", favoriteBooks);
   return (
     <BooksContainer>
       {Array.isArray(data) &&

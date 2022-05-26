@@ -43,6 +43,7 @@ const BooksView = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [inputValue, setInputValue] = useState(undefined);
   const [response, setResponse] = useState(null);
+  const [showFavorites, setShowFavorites] = useState(false);
   const urlToShowBooks = "https://gnikdroy.pythonanywhere.com/api/book/?page=";
   const urlToSearchBooks = `https://gnikdroy.pythonanywhere.com/api/book/?search=${inputValue}`;
 
@@ -53,6 +54,7 @@ const BooksView = () => {
   useEffect(() => {
     if (inputValue === "") {
       fetchData(urlToShowBooks, page);
+      setResponse(null);
     }
     const timeoutId = setTimeout(() => {
       if (inputValue) {
@@ -101,7 +103,6 @@ const BooksView = () => {
       }
     }
   };
-  const [showFavorites, setShowFavorites] = useState(false);
 
   const handleShowFavoritesBooks = () => {
     setShowFavorites(!showFavorites);
@@ -109,12 +110,43 @@ const BooksView = () => {
 
   if (inputValue && response !== 200) {
     return (
-      <div>
-        <SearchBar inputValue={inputValue} setInputValue={setInputValue} />
-        <ProgressCircle height="100vh" />;
-      </div>
+      <>
+        <Container>
+          <SearchBar inputValue={inputValue} setInputValue={setInputValue} />
+          <ShowFavoritesBooksButton
+            showFavorites={showFavorites}
+            handleClick={handleShowFavoritesBooks}
+          />
+        </Container>
+        <ProgressCircle height="100vh" />
+      </>
     );
   }
+  if (inputValue === "" && response !== 200) {
+    return (
+      <>
+        <Container>
+          <SearchBar inputValue={inputValue} setInputValue={setInputValue} />
+          <ShowFavoritesBooksButton
+            showFavorites={showFavorites}
+            handleClick={handleShowFavoritesBooks}
+          />
+        </Container>
+        <ProgressCircle height="100vh" />
+      </>
+    );
+  }
+
+  console.log("response", response);
+
+  // if (inputValue === "") {
+  //   return (
+  //     <div>
+  //       <SearchBar inputValue={inputValue} setInputValue={setInputValue} />
+  //       <ProgressCircle height="100vh" />;
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
