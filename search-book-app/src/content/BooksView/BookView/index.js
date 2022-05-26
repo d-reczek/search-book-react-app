@@ -4,11 +4,10 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import styled from "styled-components";
 
-import { Grow, Slide, Tooltip, Zoom } from "@mui/material";
+import { Grow, Tooltip, Zoom } from "@mui/material";
 import BookCover from "../images/default_book_cover.jpg";
-import FavouriteBookButton from "../favourite-book-button";
-import { useEffect, useRef, useState } from "react";
-import AddFavouriteBookButton from "../add-favourite-book-button";
+import FavoriteBookButton from "../FavouriteBookButton";
+import { useEffect, useState } from "react";
 
 const Img = materialUIStyled("img")({
   margin: "0px",
@@ -20,7 +19,6 @@ const MainStyles = styled.div`
   display: flex;
 `;
 const BooksContainer = styled(MainStyles)`
-  //   height: 100vh;
   gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
@@ -58,30 +56,26 @@ const ButtonsContainer = styled(MainStyles)`
 `;
 
 const BookView = ({ data, error, errorMessage }) => {
-  const [favorites, setFavorites] = useState([]);
-  const [favoritesList, setFavoritesList] = useState([]);
+  const [favoriteBooksIds, setFavoriteBooksIds] = useState([]);
   const storage = JSON.parse(localStorage.getItem("favorites"));
 
   useEffect(() => {
-    setFavorites(data);
-  }, [data]);
-  useEffect(() => {
     if (storage !== []) {
-      setFavoritesList(storage);
+      setFavoriteBooksIds(storage);
     }
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     if (storage === null) {
-      setFavoritesList([]);
+      setFavoriteBooksIds([]);
     }
     if (storage !== []) {
-      localStorage.setItem("favorites", JSON.stringify(favoritesList));
+      localStorage.setItem("favorites", JSON.stringify(favoriteBooksIds));
     }
     if (storage === []) {
-      localStorage.setItem("favorites", JSON.stringify(favoritesList));
+      localStorage.setItem("favorites", JSON.stringify(favoriteBooksIds));
     }
-  }, [favoritesList]);
+  }, [favoriteBooksIds]);
   if (error) {
     return (
       <ErrorContainer>
@@ -94,29 +88,17 @@ const BookView = ({ data, error, errorMessage }) => {
     );
   }
 
-  function handleFavorite(id) {
-    const newFavorites = favorites.map(item => {
-      return item.id === id ? { ...item, favorite: !item.favorite } : item;
-    });
-    let array = [];
-    let object = { id: id, favorite: true };
-    array = [...favoritesList, object];
-    setFavoritesList(array);
+  const handleAddBookToFav = id => {
+    let array = [...favoriteBooksIds, id];
 
-    setFavorites(newFavorites);
-  }
-
-  function handleDelete(id) {
-    const newFavorites = favorites.map(item => {
-      return item.id === id ? { ...item, favorite: false } : item;
+    setFavoriteBooksIds(array);
+  };
+  const handleRemoveBookFromFav = id => {
+    const newFavBooksId = favoriteBooksIds.filter(favBookId => {
+      return favBookId !== id;
     });
-    let array = favoritesList.filter(item => {
-      return item.id !== id;
-    });
-
-    setFavorites(newFavorites);
-    setFavoritesList(array);
-  }
+    setFavoriteBooksIds(newFavBooksId);
+  };
 
   return (
     <BooksContainer>
@@ -183,31 +165,17 @@ const BookView = ({ data, error, errorMessage }) => {
                               </Button>
                             )
                         )}
-                        {favorites.map(
-                          (item, i) =>
-                            book.id === item.id && (
-                              <AddFavouriteBookButton
-                                disable={item.favorite}
-                                key={item.id}
-                                add={false}
-                                handleClick={() => {
-                                  handleFavorite(item.id);
-                                }}
-                              />
-                            )
-                        )}
-                        {favoritesList.map(
-                          item =>
-                            book.id === item.id &&
-                            item.favorite && (
-                              <FavouriteBookButton
-                                key={item.id}
-                                add={item.favorite}
-                                handleClick={() => {
-                                  handleDelete(item.id);
-                                }}
-                              />
-                            )
+
+                        {favoriteBooksIds.includes(book.id) ? (
+                          <FavoriteBookButton
+                            handleClick={() => handleRemoveBookFromFav(book.id)}
+                            favBook={true}
+                          />
+                        ) : (
+                          <FavoriteBookButton
+                            handleClick={() => handleAddBookToFav(book.id)}
+                            favBook={false}
+                          />
                         )}
                       </ButtonsContainer>
                     </Zoom>
