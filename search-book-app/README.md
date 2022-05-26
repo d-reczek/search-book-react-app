@@ -26,4 +26,3 @@ The application has also been deployed thanks to the Firebase service, more prec
 - add books to your favorites
 - viewing saved favorite book list
 - possibility to read a book after clicking on a link that redirects to the content of the book
-
