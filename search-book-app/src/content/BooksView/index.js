@@ -7,7 +7,6 @@ import ProgressCircle from "./ProgressCircle";
 import styled from "styled-components";
 import SearchBar from "./SearchBar";
 import ShowFavoritesBooksButton from "./ShowFavoritesBooksButton";
-import FavoriteBooksList from "./FavoriteBooksList";
 
 const ChangePageButtonContainer = styled.div`
   position: fixed;
