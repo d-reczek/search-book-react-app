@@ -63,7 +63,7 @@ const BookView = ({ data, error, errorMessage }) => {
     if (storage !== []) {
       setFavoriteBooksIds(storage);
     }
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     if (storage === null) {

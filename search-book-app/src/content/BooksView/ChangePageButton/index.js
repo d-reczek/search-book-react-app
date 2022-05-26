@@ -1,6 +1,5 @@
 import { Button, Icon } from "@mui/material";
 
-
 const ChangePageButton = ({ type, handleClick }) => {
   return (
     <Button

@@ -56,7 +56,7 @@ const BooksView = () => {
       }
     }, 800);
     return () => clearTimeout(timeoutId);
-  }, [inputValue]);
+  }, [inputValue, page, urlToSearchBooks, urlToShowBooks]);
 
   const fetchData = (url, page = "") => {
     axios(`${url}${page}`)
