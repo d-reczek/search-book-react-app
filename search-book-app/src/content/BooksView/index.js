@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import PageWrapper from "../../common/page-wrapper";
-import ChangePageButton from "./change-page-button";
-import BookView from "./book-view";
-import ProgressCircle from "./progress-circle";
+import PageWrapper from "../../common/PageWrapper";
+import ChangePageButton from "./ChangePageButton";
+import BookView from "./BookView";
+import ProgressCircle from "./ProgressCircle";
 import styled from "styled-components";
-import SearchBar from "./search-bar";
+import SearchBar from "./SearchBar";
 
 const ChangePageButtonContainer = styled.div`
   position: fixed;

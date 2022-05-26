@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 import { Grow, Tooltip, Zoom } from "@mui/material";
 import BookCover from "../images/default_book_cover.jpg";
-import FavouriteBookButton from "../favourite-book-button";
+import FavouriteBookButton from "../FavouriteBookButton";
 import { useEffect, useState } from "react";
 
 const Img = materialUIStyled("img")({
