@@ -13,7 +13,6 @@ const ChangePageButtonContainer = styled.div`
   left: ${props => props.theme.left};
   right: ${props => props.theme.right};
   display: ${props => (props.inputValue ? "none" : "inherit")};
-  // display: ${props => (props.error ? "none" : "inherit")};
 `;
 const leftPosition = {
   left: "15px",
@@ -66,7 +65,6 @@ const BooksView = () => {
         setIsLoading(false);
         setForwardPageLoading(false);
         setBackPageLoading(false);
-        console.log("response", res.status);
         setResponse(res.status);
       })
       .catch(err => {
@@ -78,22 +76,24 @@ const BooksView = () => {
   };
 
   let count = page;
-  const handleForwardPage = () => {
-    setForwardPageLoading(true);
-    if (page === 6578) {
-      setPage(1);
-    } else {
-      count += 1;
-      setPage(count);
+  const fetchBooks = arrow => {
+    if (arrow === "forward") {
+      setForwardPageLoading(true);
+      if (page === 6578) {
+        setPage(1);
+      } else {
+        count += 1;
+        setPage(count);
+      }
     }
-  };
-  const handleBackPage = () => {
-    setBackPageLoading(true);
-    if (count === 1) {
-      setPage(6578);
-    } else {
-      count -= 1;
-      setPage(count);
+    if (arrow === "back") {
+      setBackPageLoading(true);
+      if (count === 1) {
+        setPage(6578);
+      } else {
+        count -= 1;
+        setPage(count);
+      }
     }
   };
 
@@ -120,7 +120,12 @@ const BooksView = () => {
               {backPageLoading ? (
                 <ProgressCircle />
               ) : (
-                <ChangePageButton handleClick={handleBackPage} type="back" />
+                <ChangePageButton
+                  handleClick={() => {
+                    fetchBooks("back");
+                  }}
+                  type="back"
+                />
               )}
             </ChangePageButtonContainer>
 
@@ -143,7 +148,9 @@ const BooksView = () => {
                 <ProgressCircle />
               ) : (
                 <ChangePageButton
-                  handleClick={handleForwardPage}
+                  handleClick={() => {
+                    fetchBooks("forward");
+                  }}
                   type="forward"
                 />
               )}
