@@ -25,6 +25,8 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 20px;
+  padding: 20px;
 `;
 const NoBook = styled.div`
   display: flex;
@@ -136,17 +138,6 @@ const BooksView = () => {
       </>
     );
   }
-
-  console.log("response", response);
-
-  // if (inputValue === "") {
-  //   return (
-  //     <div>
-  //       <SearchBar inputValue={inputValue} setInputValue={setInputValue} />
-  //       <ProgressCircle height="100vh" />;
-  //     </div>
-  //   );
-  // }
 
   return (
     <>
