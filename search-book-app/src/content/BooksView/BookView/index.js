@@ -55,27 +55,62 @@ const ButtonsContainer = styled(MainStyles)`
   gap: 20px;
 `;
 
-const BookView = ({ data, error, errorMessage }) => {
+const BookView = ({ data, error, errorMessage, showFavorites }) => {
   const [favoriteBooksIds, setFavoriteBooksIds] = useState([]);
-  const storage = JSON.parse(localStorage.getItem("favorites"));
-
+  const [favoriteBooks, setFavoriteBooks] = useState([]);
+  const [currentData, setCurrentData] = useState([]);
+  const favoriteBooksIdsStorage = JSON.parse(
+    localStorage.getItem("favoritesBooksIds")
+  );
+  const favoriteBooksStorage = JSON.parse(
+    localStorage.getItem("favoritesBooks")
+  );
   useEffect(() => {
-    if (storage !== []) {
-      setFavoriteBooksIds(storage);
+    showFavorites ? setCurrentData(favoriteBooks) : setCurrentData(data);
+  }, [showFavorites, data, favoriteBooks]);
+  console.log("current", currentData);
+  useEffect(() => {
+    if (favoriteBooksIdsStorage !== []) {
+      setFavoriteBooksIds(favoriteBooksIdsStorage);
     }
   }, [data]);
 
   useEffect(() => {
-    if (storage === null) {
+    if (favoriteBooksIdsStorage === null) {
       setFavoriteBooksIds([]);
     }
-    if (storage !== []) {
-      localStorage.setItem("favorites", JSON.stringify(favoriteBooksIds));
+    if (favoriteBooksIdsStorage !== []) {
+      localStorage.setItem(
+        "favoritesBooksIds",
+        JSON.stringify(favoriteBooksIds)
+      );
     }
-    if (storage === []) {
-      localStorage.setItem("favorites", JSON.stringify(favoriteBooksIds));
+    if (favoriteBooksIdsStorage === []) {
+      localStorage.setItem(
+        "favoritesBooksIds",
+        JSON.stringify(favoriteBooksIds)
+      );
     }
   }, [favoriteBooksIds]);
+
+  useEffect(() => {
+    if (favoriteBooksStorage !== []) {
+      setFavoriteBooks(favoriteBooksStorage);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (favoriteBooksStorage === null) {
+      setFavoriteBooks([]);
+    }
+    if (favoriteBooksStorage !== []) {
+      localStorage.setItem("favoritesBooks", JSON.stringify(favoriteBooks));
+    }
+    if (favoriteBooksStorage === []) {
+      localStorage.setItem("favoritesBooks", JSON.stringify(favoriteBooks));
+    }
+  }, [favoriteBooks]);
+
   if (error) {
     return (
       <ErrorContainer>
@@ -88,22 +123,28 @@ const BookView = ({ data, error, errorMessage }) => {
     );
   }
 
-  const handleAddBookToFav = id => {
+  const handleAddBookToFav = (id, objBook) => {
     let array = [...favoriteBooksIds, id];
+    let array2 = [...favoriteBooks, objBook];
 
     setFavoriteBooksIds(array);
+    setFavoriteBooks(array2);
   };
-  const handleRemoveBookFromFav = id => {
+  const handleRemoveBookFromFav = (id, objBook) => {
     const newFavBooksId = favoriteBooksIds.filter(favBookId => {
       return favBookId !== id;
     });
+    const newFavBooks = favoriteBooks.filter(favBook => {
+      return favBook.id !== objBook.id;
+    });
     setFavoriteBooksIds(newFavBooksId);
+    setFavoriteBooks(newFavBooks);
   };
-
+  console.log("favbooks", favoriteBooks);
   return (
     <BooksContainer>
       {Array.isArray(data) &&
-        data.map(
+        currentData.map(
           book =>
             book.type === "Text" && (
               <Grow key={book.id} in timeout={500}>
@@ -168,12 +209,16 @@ const BookView = ({ data, error, errorMessage }) => {
 
                         {favoriteBooksIds.includes(book.id) ? (
                           <FavoriteBookButton
-                            handleClick={() => handleRemoveBookFromFav(book.id)}
+                            handleClick={() =>
+                              handleRemoveBookFromFav(book.id, book)
+                            }
                             favBook={true}
                           />
                         ) : (
                           <FavoriteBookButton
-                            handleClick={() => handleAddBookToFav(book.id)}
+                            handleClick={() =>
+                              handleAddBookToFav(book.id, book)
+                            }
                             favBook={false}
                           />
                         )}

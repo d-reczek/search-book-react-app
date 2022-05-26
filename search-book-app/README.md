@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+# Search Book App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Intro
 
-## Available Scripts
+## Search is a  [React](https://reactjs.org/) app
 
-In the project directory, you can run:
+In the app you can save tasks, set reminders for events and manage your budget.
+All your activities are saved in a private account where you can set your own avatar, change your password if necessary and, if need be, delete the account and clear your data.
 
-### `npm start`
+# Demo
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## [Home Organizer](https://homeorganizer-44534.web.app/)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Demo user
 
-### `npm test`
+### login: guest@guest.pl
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### password: guest123
 
-### `npm run build`
+![HomePage](/intro.png)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Enviroment
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The application was written using the [REACT](https://reactjs.org/) library. Application was styled using [MaterialUI](https://mui.com/) library and [styled-component](https://styled-components.com/). <br/>
+Application backend is based on Google service called [Firebase](https://firebase.google.com/).
+All user data is stored thanks to [Firebase Firestore](https://firebase.google.com/docs/firestore) service, login and user verification is managed by [Firebase Authentication](https://firebase.google.com/docs/auth) service. The user avatar is stored in the [Firebase Storage](https://firebase.google.com/docs/storage) service.
+The application has also been deployed thanks to the Firebase service, more precisely thanks to the [Firebase Hosting](https://firebase.google.com/docs/hosting) service.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Features
 
-### `npm run eject`
+- user can create an account by entering your name, surname and email
+- user when forgetting the password has the possibility to reset the password by sending an email with a password reset link
+- adding task
+- budget:
+  - management, ability to categorize expenses/income
+  - ability to sum up all expenses/income by category
+- calendar: - possibility of setting about the event - display a reminder for a given event on a given day, a day and two days before the event date
+  -user panel: - ability to change avatar - ability to change user - possibility to change user data except name, surname and email - possibility to change user password - user can delete their account with all of his date
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+![HomePage](/tasks.png)
+![HomePage](/budget.png)
+![HomePage](/calendar.png)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
