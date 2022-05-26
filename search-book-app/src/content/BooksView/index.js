@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import PageWrapper from "../../common/page-wrapper";
-import ChangePageButton from "./change-page-button";
-import BookView from "./book-view";
-import ProgressCircle from "./progress-circle";
+import PageWrapper from "../../common/PageWrapper";
+import ChangePageButton from "./ChangePageButton";
+import BookView from "./BookView";
+import ProgressCircle from "./ProgressCircle";
 import styled from "styled-components";
-import SearchBar from "./search-bar";
+import SearchBar from "./SearchBar";
 
 const ChangePageButtonContainer = styled.div`
   position: fixed;
@@ -13,7 +13,6 @@ const ChangePageButtonContainer = styled.div`
   left: ${props => props.theme.left};
   right: ${props => props.theme.right};
   display: ${props => (props.inputValue ? "none" : "inherit")};
-  // display: ${props => (props.error ? "none" : "inherit")};
 `;
 const leftPosition = {
   left: "15px",
@@ -39,25 +38,25 @@ const BooksView = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [inputValue, setInputValue] = useState(undefined);
   const [response, setResponse] = useState(null);
-  const url1 = "https://gnikdroy.pythonanywhere.com/api/book/?page=";
-  const url2 = `https://gnikdroy.pythonanywhere.com/api/book/?search=${inputValue}`;
+  const urlToShowBooks = "https://gnikdroy.pythonanywhere.com/api/book/?page=";
+  const urlToSearchBooks = `https://gnikdroy.pythonanywhere.com/api/book/?search=${inputValue}`;
 
   useEffect(() => {
-    fetchData(url1, page);
+    fetchData(urlToShowBooks, page);
   }, [page]);
 
   useEffect(() => {
     if (inputValue === "") {
-      fetchData(url1, page);
+      fetchData(urlToShowBooks, page);
     }
     const timeoutId = setTimeout(() => {
       if (inputValue) {
-        fetchData(url2);
+        fetchData(urlToSearchBooks);
         setResponse(null);
       }
     }, 800);
     return () => clearTimeout(timeoutId);
-  }, [inputValue]);
+  }, [inputValue, page, urlToSearchBooks, urlToShowBooks]);
 
   const fetchData = (url, page = "") => {
     axios(`${url}${page}`)
@@ -66,7 +65,6 @@ const BooksView = () => {
         setIsLoading(false);
         setForwardPageLoading(false);
         setBackPageLoading(false);
-        console.log("response", res.status);
         setResponse(res.status);
       })
       .catch(err => {
@@ -78,22 +76,24 @@ const BooksView = () => {
   };
 
   let count = page;
-  const handleForwardPage = () => {
-    setForwardPageLoading(true);
-    if (page === 6578) {
-      setPage(1);
-    } else {
-      count += 1;
-      setPage(count);
+  const fetchBooks = arrow => {
+    if (arrow === "forward") {
+      setForwardPageLoading(true);
+      if (page === 6578) {
+        setPage(1);
+      } else {
+        count += 1;
+        setPage(count);
+      }
     }
-  };
-  const handleBackPage = () => {
-    setBackPageLoading(true);
-    if (count === 1) {
-      setPage(6578);
-    } else {
-      count -= 1;
-      setPage(count);
+    if (arrow === "back") {
+      setBackPageLoading(true);
+      if (count === 1) {
+        setPage(6578);
+      } else {
+        count -= 1;
+        setPage(count);
+      }
     }
   };
 
@@ -105,7 +105,6 @@ const BooksView = () => {
       </div>
     );
   }
-  console.log("data", data);
   return (
     <>
       {isLoading ? (
@@ -120,7 +119,12 @@ const BooksView = () => {
               {backPageLoading ? (
                 <ProgressCircle />
               ) : (
-                <ChangePageButton handleClick={handleBackPage} type="back" />
+                <ChangePageButton
+                  handleClick={() => {
+                    fetchBooks("back");
+                  }}
+                  type="back"
+                />
               )}
             </ChangePageButtonContainer>
 
@@ -143,7 +147,9 @@ const BooksView = () => {
                 <ProgressCircle />
               ) : (
                 <ChangePageButton
-                  handleClick={handleForwardPage}
+                  handleClick={() => {
+                    fetchBooks("forward");
+                  }}
                   type="forward"
                 />
               )}
