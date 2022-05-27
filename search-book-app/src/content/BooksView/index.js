@@ -34,11 +34,7 @@ const rightPosition = {
   right: "0px",
   rightMobile: "-30px",
 };
-const stylesChangePage = {
-  boxSizing: "border-box",
-  margin: "0 50px",
-  padding: "24px 8px",
-};
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
