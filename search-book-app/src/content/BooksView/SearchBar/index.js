@@ -6,7 +6,6 @@ const InputContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 80%;
-  // margin: 15px auto;
 `;
 
 const SearchBar = ({ setInputValue, inputValue }) => {
