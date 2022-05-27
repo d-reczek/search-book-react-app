@@ -7,6 +7,7 @@ import ProgressCircle from "./ProgressCircle";
 import styled from "styled-components";
 import SearchBar from "./SearchBar";
 import ShowFavoritesBooksButton from "./ShowFavoritesBooksButton";
+import { device } from "../../common/deviceBreakPoints";
 
 const ChangePageButtonContainer = styled.div`
   position: fixed;
@@ -14,16 +15,30 @@ const ChangePageButtonContainer = styled.div`
   left: ${props => props.theme.left};
   right: ${props => props.theme.right};
   display: ${props => (props.inputValue ? "none" : "inherit")};
+  @media ${device.tablet} {
+    left: ${props => props.theme.leftMobile};
+    right: ${props => props.theme.rightMobile};
+    top: 90%;
+  }
+  @media ${device.mobile} {
+    left: ${props => props.theme.leftMobile};
+    right: ${props => props.theme.rightMobile};
+    top: 90%;
+  }
 `;
 const leftPosition = {
   left: "15px",
+  leftMobile: "-20px",
 };
 const rightPosition = {
-  right: "15px",
+  right: "0px",
+  rightMobile: "-30px",
 };
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  gap: 20px;
   align-items: center;
   margin: 20px;
   padding: 20px;
