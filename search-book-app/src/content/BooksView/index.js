@@ -18,12 +18,12 @@ const ChangePageButtonContainer = styled.div`
   @media ${device.tablet} {
     left: ${props => props.theme.leftMobile};
     right: ${props => props.theme.rightMobile};
-    top: 90%;
+    top: 85%;
   }
   @media ${device.mobile} {
     left: ${props => props.theme.leftMobile};
     right: ${props => props.theme.rightMobile};
-    top: 90%;
+    top: 75%;
   }
 `;
 const leftPosition = {
@@ -33,6 +33,11 @@ const leftPosition = {
 const rightPosition = {
   right: "0px",
   rightMobile: "-30px",
+};
+const stylesChangePage = {
+  boxSizing: "border-box",
+  margin: "0 50px",
+  padding: "24px 8px",
 };
 const Container = styled.div`
   display: flex;
@@ -135,7 +140,7 @@ const BooksView = () => {
             handleClick={handleShowFavoritesBooks}
           />
         </Container>
-        <ProgressCircle height="100vh" />
+        <ProgressCircle />
       </>
     );
   }
@@ -149,7 +154,7 @@ const BooksView = () => {
             handleClick={handleShowFavoritesBooks}
           />
         </Container>
-        <ProgressCircle height="100vh" />
+        <ProgressCircle />
       </>
     );
   }
@@ -157,7 +162,7 @@ const BooksView = () => {
   return (
     <>
       {isLoading ? (
-        <ProgressCircle height="100vh" />
+        <ProgressCircle />
       ) : (
         <>
           <Container>
@@ -172,7 +177,7 @@ const BooksView = () => {
               inputValue={inputValue}
               theme={leftPosition}>
               {backPageLoading ? (
-                <ProgressCircle />
+                <ProgressCircle stylesChangePage={true} />
               ) : (
                 <ChangePageButton
                   handleClick={() => {
@@ -198,7 +203,7 @@ const BooksView = () => {
               inputValue={inputValue}
               theme={rightPosition}>
               {forwardPageLoading ? (
-                <ProgressCircle />
+                <ProgressCircle stylesChangePage={true} />
               ) : (
                 <ChangePageButton
                   handleClick={() => {

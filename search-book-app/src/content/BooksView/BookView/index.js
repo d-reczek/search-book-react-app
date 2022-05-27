@@ -203,7 +203,7 @@ const BookView = ({ data, error, errorMessage, showFavorites }) => {
                             <Tooltip
                               key={item.id}
                               title="Information about book"
-                              placement="left"
+                              placement="top-end"
                               TransitionComponent={Zoom}>
                               <Link
                                 target="blank"
