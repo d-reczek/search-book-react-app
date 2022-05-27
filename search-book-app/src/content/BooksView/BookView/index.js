@@ -51,8 +51,9 @@ const BookInfoContainer = styled(MainStyles)`
   width: 100%;
   margin: 10px;
   @media ${device.tablet} {
-    // width: inherit;
+    flex-direction: column;
     align-items: center;
+    width: inherit;
   }
   @media ${device.mobile} {
     flex-direction: column;
