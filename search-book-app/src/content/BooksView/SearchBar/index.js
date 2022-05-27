@@ -51,7 +51,6 @@ const SearchBar = ({ setInputValue, inputValue }) => {
             padding: "0",
           },
         }}
-        autoFocus
         defaultValue={inputValue}
         onChange={e => handleOnChange(e.target.value)}
       />
