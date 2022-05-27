@@ -7,6 +7,7 @@ import ProgressCircle from "./ProgressCircle";
 import styled from "styled-components";
 import SearchBar from "./SearchBar";
 import ShowFavoritesBooksButton from "./ShowFavoritesBooksButton";
+import { device } from "../../common/deviceBreakPoints";
 
 const ChangePageButtonContainer = styled.div`
   position: fixed;
@@ -14,16 +15,35 @@ const ChangePageButtonContainer = styled.div`
   left: ${props => props.theme.left};
   right: ${props => props.theme.right};
   display: ${props => (props.inputValue ? "none" : "inherit")};
+  @media ${device.tablet} {
+    left: ${props => props.theme.leftMobile};
+    right: ${props => props.theme.rightMobile};
+    top: 85%;
+  }
+  @media ${device.mobile} {
+    left: ${props => props.theme.leftMobile};
+    right: ${props => props.theme.rightMobile};
+    top: 75%;
+  }
 `;
 const leftPosition = {
   left: "15px",
+  leftMobile: "-20px",
 };
 const rightPosition = {
-  right: "15px",
+  right: "0px",
+  rightMobile: "-30px",
+};
+const stylesChangePage = {
+  boxSizing: "border-box",
+  margin: "0 50px",
+  padding: "24px 8px",
 };
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  gap: 20px;
   align-items: center;
   margin: 20px;
   padding: 20px;
@@ -120,7 +140,7 @@ const BooksView = () => {
             handleClick={handleShowFavoritesBooks}
           />
         </Container>
-        <ProgressCircle height="100vh" />
+        <ProgressCircle />
       </>
     );
   }
@@ -134,7 +154,7 @@ const BooksView = () => {
             handleClick={handleShowFavoritesBooks}
           />
         </Container>
-        <ProgressCircle height="100vh" />
+        <ProgressCircle />
       </>
     );
   }
@@ -142,7 +162,7 @@ const BooksView = () => {
   return (
     <>
       {isLoading ? (
-        <ProgressCircle height="100vh" />
+        <ProgressCircle />
       ) : (
         <>
           <Container>
@@ -157,7 +177,7 @@ const BooksView = () => {
               inputValue={inputValue}
               theme={leftPosition}>
               {backPageLoading ? (
-                <ProgressCircle />
+                <ProgressCircle stylesChangePage={true} />
               ) : (
                 <ChangePageButton
                   handleClick={() => {
@@ -183,7 +203,7 @@ const BooksView = () => {
               inputValue={inputValue}
               theme={rightPosition}>
               {forwardPageLoading ? (
-                <ProgressCircle />
+                <ProgressCircle stylesChangePage={true} />
               ) : (
                 <ChangePageButton
                   handleClick={() => {

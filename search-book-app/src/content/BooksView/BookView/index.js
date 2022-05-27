@@ -1,5 +1,4 @@
 import { styled as materialUIStyled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import styled from "styled-components";
@@ -8,6 +7,7 @@ import { Grow, Tooltip, Zoom } from "@mui/material";
 import BookCover from "../images/default_book_cover.jpg";
 import FavoriteBookButton from "../FavouriteBookButton";
 import { useEffect, useState } from "react";
+import { device } from "../../../common/deviceBreakPoints";
 
 const Img = materialUIStyled("img")({
   margin: "0px",
@@ -22,7 +22,19 @@ const BooksContainer = styled(MainStyles)`
   gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 0 50px;
+  // margin: 0 70px;
+  // padding: 0 70px;
+  max-width: 1200px;
+
+  @media ${device.laptop} {
+    max-width: 1800px;
+  }
+  @media ${device.tablet} {
+    max-width: 370px;
+  }
+  @media ${device.desktop} {
+    max-width: 1700px;
+  }
 `;
 
 const BookContainer = styled(MainStyles)`
@@ -30,11 +42,43 @@ const BookContainer = styled(MainStyles)`
   padding: 15px;
   flex-wrap: wrap;
   justify-content: center;
+  @media ${device.mobile} {
+    flex-direction: column;
+  }
 `;
 const BookInfoContainer = styled(MainStyles)`
   gap: 30px;
   width: 100%;
   margin: 10px;
+  @media ${device.tablet} {
+    flex-direction: column;
+    align-items: center;
+    width: inherit;
+  }
+  @media ${device.mobile} {
+    flex-direction: column;
+    align-items: center;
+    width: inherit;
+  }
+`;
+
+const BookWrapper = styled.div`
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.87);
+  border-radius: 4px;
+  box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%),
+    0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+  padding: 5px;
+  width: 380px;
+  @media ${device.laptop} {
+    width: 600px;
+  }
+  @media ${device.tablet} {
+    width: 480px;
+  }
+  @media ${device.mobile} {
+    width: 290px;
+  }
 `;
 
 const BookInfoParagraph = styled.span`
@@ -53,6 +97,9 @@ const ErrorContainer = styled(BooksContainer)`
 `;
 const ButtonsContainer = styled(MainStyles)`
   gap: 20px;
+  @media ${device.mobile} {
+    justify-content: center;
+  }
 `;
 
 const BookView = ({ data, error, errorMessage, showFavorites }) => {
@@ -146,11 +193,7 @@ const BookView = ({ data, error, errorMessage, showFavorites }) => {
           book =>
             book.type === "Text" && (
               <Grow key={book.id} in timeout={500}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    width: "450px",
-                  }}>
+                <BookWrapper>
                   <BookContainer>
                     <BookInfoContainer>
                       {book.resources.map(
@@ -160,7 +203,7 @@ const BookView = ({ data, error, errorMessage, showFavorites }) => {
                             <Tooltip
                               key={item.id}
                               title="Information about book"
-                              placement="left"
+                              placement="top-end"
                               TransitionComponent={Zoom}>
                               <Link
                                 target="blank"
@@ -223,7 +266,7 @@ const BookView = ({ data, error, errorMessage, showFavorites }) => {
                       </ButtonsContainer>
                     </Zoom>
                   </BookContainer>
-                </Paper>
+                </BookWrapper>
               </Grow>
             )
         )}
