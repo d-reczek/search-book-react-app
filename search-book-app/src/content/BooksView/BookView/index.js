@@ -112,6 +112,7 @@ const BookView = ({ data, error, errorMessage, showFavorites }) => {
   const favoriteBooksStorage = JSON.parse(
     localStorage.getItem("favoritesBooks")
   );
+  console.log(data);
   useEffect(() => {
     showFavorites ? setCurrentData(favoriteBooks) : setCurrentData(data);
   }, [showFavorites, data, favoriteBooks]);
@@ -189,87 +190,83 @@ const BookView = ({ data, error, errorMessage, showFavorites }) => {
   return (
     <BooksContainer>
       {Array.isArray(data) &&
-        currentData.map(
-          book =>
-            book.type === "Text" && (
-              <Grow key={book.id} in timeout={500}>
-                <BookWrapper>
-                  <BookContainer>
-                    <BookInfoContainer>
-                      {book.resources.map(
-                        item =>
-                          item.type === "image/jpeg" &&
-                          item.uri.includes("medium") && (
-                            <Tooltip
-                              key={item.id}
-                              title="Information about book"
-                              placement="top-end"
-                              TransitionComponent={Zoom}>
-                              <Link
-                                target="blank"
-                                href={`https://www.gutenberg.org/ebooks/${book.id}`}>
-                                <Img alt="book-cover" src={item.uri} />
-                              </Link>
-                            </Tooltip>
-                          )
-                      )}
-                      {book.resources.length < 11 && (
-                        <Img alt="book-cover" src={BookCover} />
-                      )}
-                      <div>
-                        <BookInfoParagraph>Book title:</BookInfoParagraph>
-                        <BookTitleName>{book.title}</BookTitleName>
-                        <BookInfoParagraph>Author:</BookInfoParagraph>
+        currentData.map(book => (
 
-                        {book.agents.map(
-                          item =>
-                            item.type === "Author" && (
-                              <BookTitleName key={item.id}>
-                                {item.person}
-                              </BookTitleName>
-                            )
-                        )}
-                      </div>
-                    </BookInfoContainer>
-                    <Zoom in timeout={500}>
-                      <ButtonsContainer>
-                        {book.resources.map(
-                          item =>
-                            item.type.includes("text/html") &&
-                            item.uri.includes(".htm") && (
-                              <Button key={item.id} variant="outlined">
-                                <Link
-                                  underline="none"
-                                  target="blank"
-                                  href={item.uri}>
-                                  READ BOOK
-                                </Link>
-                              </Button>
-                            )
-                        )}
+          <Grow key={book.id} in timeout={500}>
+            <BookWrapper>
+              <BookContainer>
+                <BookInfoContainer>
+                  {book.resources.map(
+                    item =>
+                      item.type === "image/jpeg" &&
+                      item.uri.includes("medium") && (
+                        <Tooltip
+                          key={item.id}
+                          title="Information about book"
+                          placement="top-end"
+                          TransitionComponent={Zoom}>
+                          <Link
+                            target="blank"
+                            href={`https://www.gutenberg.org/ebooks/${book.id}`}>
+                            <Img alt="book-cover" src={item.uri} />
+                          </Link>
+                        </Tooltip>
+                      )
+                  )}
+                  {book.resources.length < 11 && (
+                    <Img alt="book-cover" src={BookCover} />
+                  )}
+                  <div>
+                    <BookInfoParagraph>Book title:</BookInfoParagraph>
+                    <BookTitleName>{book.title}</BookTitleName>
+                    <BookInfoParagraph>Author:</BookInfoParagraph>
 
-                        {favoriteBooksIds.includes(book.id) ? (
-                          <FavoriteBookButton
-                            handleClick={() =>
-                              handleRemoveBookFromFav(book.id, book)
-                            }
-                            favBook={true}
-                          />
-                        ) : (
-                          <FavoriteBookButton
-                            handleClick={() =>
-                              handleAddBookToFav(book.id, book)
-                            }
-                            favBook={false}
-                          />
-                        )}
-                      </ButtonsContainer>
-                    </Zoom>
-                  </BookContainer>
-                </BookWrapper>
-              </Grow>
-            )
-        )}
+                    {book.agents.map(
+                      item =>
+                        item.type === "Author" && (
+                          <BookTitleName key={item.id}>
+                            {item.person}
+                          </BookTitleName>
+                        )
+                    )}
+                  </div>
+                </BookInfoContainer>
+                <Zoom in timeout={500}>
+                  <ButtonsContainer>
+                    {book.resources.map(
+                      item =>
+                        item.type.includes("text/html") &&
+                        item.uri.includes(".htm") && (
+                          <Button key={item.id} variant="outlined">
+                            <Link
+                              underline="none"
+                              target="blank"
+                              href={item.uri}>
+                              READ BOOK
+                            </Link>
+                          </Button>
+                        )
+                    )}
+
+                    {favoriteBooksIds.includes(book.id) ? (
+                      <FavoriteBookButton
+                        handleClick={() =>
+                          handleRemoveBookFromFav(book.id, book)
+                        }
+                        favBook={true}
+                      />
+                    ) : (
+                      <FavoriteBookButton
+                        handleClick={() => handleAddBookToFav(book.id, book)}
+                        favBook={false}
+                      />
+                    )}
+                  </ButtonsContainer>
+                </Zoom>
+              </BookContainer>
+            </BookWrapper>
+          </Grow>
+        ))}
     </BooksContainer>
   );
 };
