@@ -236,7 +236,8 @@ const BookView = ({ data, error, errorMessage, showFavorites }) => {
                     {book.resources.map(
                       item =>
                         item.type.includes("text/html") &&
-                        item.uri.includes(".htm") && (
+                        item.uri.includes(".htm") && 
+                        item.uri.includes(".html.images") && (
                           <Button key={item.id} variant="outlined">
                             <Link
                               underline="none"
